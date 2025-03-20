@@ -2,27 +2,22 @@ import fetch from 'node-fetch';
 
 const BASE_URL = 'http://localhost:49156';
 
-export async function createWindow(name) {
+export async function createWindow() {
   const response = await fetch(`${BASE_URL}/window/create`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name,
-    }),
   });
   return await response.json();
 }
 
-export async function batchCreateWindows(windows) {
+export async function batchCreateWindows(max) {
   const results = [];
-  for (const window of windows) {
+  const count = Number(max) || 1;
+  for (let i = 0; i < count; i++) {
     try {
-      const result = await createWindow(window.name);
+      const result = await createWindow();
       results.push(result);
     } catch (error) {
-      console.error(`创建窗口失败: ${window.name}`, error);
+      console.error('cant create profile', error);
     }
   }
   return results;

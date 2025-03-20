@@ -122,6 +122,7 @@ const getRealIP = async (proxy: DB.Proxy) => {
     return await Promise.race([
       makeRequest('https://ipinfo.io/json', requestProxy),
       makeRequest('https://api.ipify.org?format=json', requestProxy),
+      makeRequest('https://api.myip.com/?format=json', requestProxy),
     ]);
   } catch (error) {
     bridgeMessageToUI({

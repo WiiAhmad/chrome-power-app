@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import puppeteer from 'puppeteer';
-import {openProfile} from './demo/profiles.js';
+import {open, close} from './demo/profiles.js';
 export async function createBrowser(wsEndpoint) {
   const browser = await puppeteer.connect({
     browserWSEndpoint: wsEndpoint,
@@ -20,6 +20,8 @@ async function randomWait(min, max) {
 // 主要的自动化脚本函数
 export async function autoScript(browser) {
   try {
+    const page = await browser.newPage();
+    await page.goto('https://discord.com');
     
   } catch (error) {
     console.error('自动化脚本执行出错:', error);
@@ -27,9 +29,9 @@ export async function autoScript(browser) {
 }
 
 (async () => {
-  const openResult = await openProfile(77);
+  const openResult = await open(1);
   console.log(openResult);
   const browser = await createBrowser(openResult.browser.webSocketDebuggerUrl);
   await autoScript(browser);
-  // await browser.close(); // Only if you want to close the external Chrome instance.
+  //await browser.close(); // Only if you want to close the external Chrome instance.
 })();
