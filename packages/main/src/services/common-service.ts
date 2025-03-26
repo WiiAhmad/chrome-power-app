@@ -103,6 +103,9 @@ export const initCommonService = () => {
     if (values.localChromePath === '/Applications/Google Chrome.app') {
       values.localChromePath = values.localChromePath + '/Contents/MacOS/Google Chrome';
     }
+    if (values.localChromePath === '/Applications/Chromium.app') {
+      values.localChromePath = values.localChromePath + '/Contents/MacOS/Chromium';
+    }
     const configFilePath = CONFIG_FILE_PATH;
 
     try {

@@ -175,6 +175,8 @@ i18n
           arrange_height: 'Height',
           settings_chrome_args: 'Chrome launch arguments',
           settings_chrome_args_placeholder: 'One argument per line, for example:\n--disable-gpu\n--no-sandbox',
+          settings_browser_name: 'Browser Name',
+          settings_browser_name_placeholder: 'Enter browser name, e.g. Google Chrome',
         },
       },
       zh: {
@@ -342,6 +344,8 @@ i18n
           arrange_height: '高度',
           settings_chrome_args: 'Chrome 启动参数',
           settings_chrome_args_placeholder: '每行一个参数，例如:\n--disable-gpu\n--no-sandbox',
+          settings_browser_name: '浏览器名称',
+          settings_browser_name_placeholder: '请输入浏览器名称，例如：Google Chrome',
         },
       },
     },

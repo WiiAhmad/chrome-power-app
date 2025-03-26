@@ -16,6 +16,7 @@ export const getSettings = (): SettingOptions => {
     localChromePath: '',
     chromiumBinPath: '',
     automationConnect: false,
+    browserName: 'Google Chrome',
   };
 
   try {
