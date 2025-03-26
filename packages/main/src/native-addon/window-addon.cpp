@@ -61,9 +61,16 @@ public:
         return exports;
     }
 
-    WindowManager(const Napi::CallbackInfo& info) : Napi::ObjectWrap<WindowManager>(info) {}
+    WindowManager(const Napi::CallbackInfo& info) : Napi::ObjectWrap<WindowManager>(info) {
+        if (info.Length() < 1) {
+            throw Napi::TypeError::New(info.Env(), "Browser name is required");
+            return;
+        }
+        browserName = info[0].As<Napi::String>().Utf8Value();
+    }
 
 private:
+    std::string browserName;
     #ifdef _WIN32
     bool ArrangeWindow(HWND hwnd, int x, int y, int width, int height, bool preserveSize = false) {
         if (!hwnd) return false;
@@ -106,7 +113,7 @@ private:
     bool IsExtensionWindow(const char* title, const char* className) {
         return title != nullptr &&
                strlen(title) > 0 &&
-               strstr(title, "Google Chrome") == nullptr;
+               strstr(title, browserName.c_str()) == nullptr;
     }
 
     std::vector<WindowInfo> FindWindowsByPid(DWORD processId) {
@@ -128,7 +135,7 @@ private:
                 GetWindowRect(hwnd, &rect);
 
                 bool isExtension = IsExtensionWindow(title, className);
-                bool isMainWindow = strstr(title, "Google Chrome") != nullptr &&
+                bool isMainWindow = strstr(title, browserName.c_str()) != nullptr &&
                                   (GetWindowLong(hwnd, GWL_STYLE) & WS_OVERLAPPEDWINDOW);
 
                 if (isMainWindow || isExtension) {
@@ -173,9 +180,9 @@ private:
             CFStringGetCString(titleRef, buffer, sizeof(buffer), kCFStringEncodingUTF8);
             CFRelease(titleRef);
             
-            // Extension windows typically don't have "Google Chrome" in their titles
+            // Extension windows typically don't have browser name in their titles
             // and are usually smaller floating windows
-            if (strstr(buffer, "Google Chrome") == nullptr) {
+            if (strstr(buffer, browserName.c_str()) == nullptr) {
                 return true;
             }
         }
@@ -229,8 +236,8 @@ private:
             CFStringGetCString(titleRef, buffer, sizeof(buffer), kCFStringEncodingUTF8);
             CFRelease(titleRef);
             
-            // Main Chrome window should contain "Google Chrome" in title
-            if (strstr(buffer, "Google Chrome") != nullptr) {
+            // Main browser window should contain browser name in title
+            if (strstr(buffer, browserName.c_str()) != nullptr) {
                 // Also check subrole to ensure it's a standard window
                 CFStringRef subroleRef;
                 if (AXUIElementCopyAttributeValue(window, kAXSubroleAttribute, (CFTypeRef*)&subroleRef) == kAXErrorSuccess) {
